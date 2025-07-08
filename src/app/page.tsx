@@ -12,7 +12,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { GridPattern } from '@/components/decoration/GridPattern';
 import { featuredProjects } from '@/lib/projects';
 import { Badge } from '@/components/ui/badge';
-import { ProjectCard } from '@/components/portfolio/ProjectCard';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -202,8 +201,8 @@ function FeaturedWork() {
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            gsap.utils.toArray<HTMLDivElement>('.featured-work-card').forEach((card, i) => {
-                gsap.fromTo(card,
+            gsap.utils.toArray<HTMLDivElement>('.featured-project-item').forEach((item) => {
+                gsap.fromTo(item,
                     { opacity: 0, y: 100 },
                     {
                         opacity: 1,
@@ -211,7 +210,7 @@ function FeaturedWork() {
                         duration: 0.8,
                         ease: 'power4.out',
                         scrollTrigger: {
-                            trigger: card,
+                            trigger: item,
                             start: 'top 85%',
                         }
                     }
@@ -222,31 +221,55 @@ function FeaturedWork() {
     }, []);
 
     return (
-        <section ref={sectionRef} id="work" className="py-20 md:py-28 bg-card/50 relative">
+        <section ref={sectionRef} id="work" className="py-20 md:py-28 bg-background relative overflow-hidden">
              <GridPattern
                 width={50}
                 height={50}
                 x={-1}
                 y={-1}
-                className="absolute inset-0 h-full w-full stroke-primary/10 [mask-image:linear-gradient(to_bottom,transparent,white,transparent)]"
+                className="absolute inset-0 h-full w-full stroke-primary/10 [mask-image:linear-gradient(to_bottom,transparent,white_20%,white_80%,transparent)]"
              />
             <div className="container mx-auto px-4 relative">
-                <div className="text-center mb-16">
+                <div className="text-center mb-16 md:mb-24">
                     <h2 className="font-headline text-3xl md:text-4xl font-bold">Our Masterpieces</h2>
                     <p className="mt-4 max-w-2xl mx-auto text-muted-foreground">
-                        A look at some of our favorite projects. We don't just build websites, we build digital experiences.
+                        Interact with our live projects directly from the showcase.
                     </p>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+
+                <div className="space-y-24 md:space-y-32">
                     {featuredProjects.map((project, index) => (
-                       <ProjectCard 
-                          key={project.slug} 
-                          project={project} 
-                          className="featured-work-card"
-                        />
+                        <div key={project.slug} className="featured-project-item grid md:grid-cols-2 gap-8 md:gap-16 items-center">
+                            <div className={`relative aspect-[16/10] rounded-xl shadow-2xl bg-muted/30 overflow-hidden group transition-all duration-300 hover:scale-[1.02] hover:shadow-primary/20 ${index % 2 === 1 ? 'md:order-last' : ''}`}>
+                                <div className="absolute inset-0 bg-muted flex items-center justify-center">
+                                    <p className="text-muted-foreground text-sm">Loading Live Preview...</p>
+                                </div>
+                                <iframe
+                                    src={project.link}
+                                    title={project.title}
+                                    className="w-full h-full border-0 transition-opacity duration-500 opacity-0"
+                                    loading="lazy"
+                                    onLoad={(e) => e.currentTarget.style.opacity = '1'}
+                                    sandbox="allow-scripts allow-same-origin"
+                                />
+                            </div>
+                            <div className="details">
+                                <h3 className="font-headline text-2xl md:text-3xl font-bold">{project.title}</h3>
+                                <div className="flex flex-wrap gap-2 my-4">
+                                    {project.tags.map(tag => (
+                                        <Badge key={tag} variant="secondary">{tag}</Badge>
+                                    ))}
+                                </div>
+                                <p className="text-muted-foreground">{project.description}</p>
+                                <Button asChild variant="outline" className="mt-8">
+                                    <Link href={`/portfolio/${project.slug}`}>Explore Project <ArrowRight className="ml-2" /></Link>
+                                </Button>
+                            </div>
+                        </div>
                     ))}
                 </div>
-                 <div className="mt-16 text-center">
+
+                 <div className="mt-24 text-center">
                     <Button asChild size="lg" variant="outline">
                         <Link href="/portfolio">View All Projects <ArrowRight className="ml-2" /></Link>
                     </Button>
