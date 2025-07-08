@@ -222,8 +222,15 @@ function FeaturedWork() {
     }, []);
 
     return (
-        <section ref={sectionRef} id="work" className="py-20 md:py-28 bg-card/50">
-            <div className="container mx-auto px-4">
+        <section ref={sectionRef} id="work" className="py-20 md:py-28 bg-card/50 relative">
+             <GridPattern
+                width={50}
+                height={50}
+                x={-1}
+                y={-1}
+                className="absolute inset-0 h-full w-full stroke-primary/10 [mask-image:linear-gradient(to_bottom,transparent,white,transparent)]"
+             />
+            <div className="container mx-auto px-4 relative">
                 <div className="text-center mb-16">
                     <h2 className="font-headline text-3xl md:text-4xl font-bold">Our Masterpieces</h2>
                     <p className="mt-4 max-w-2xl mx-auto text-muted-foreground">
