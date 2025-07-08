@@ -1,60 +1,41 @@
+'use client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import { ArrowRight, Code, Component, Megaphone, PenTool, Quote, Award, Users, Zap, Briefcase } from 'lucide-react';
-import { GridPattern } from '@/components/decoration/GridPattern';
+import { ArrowRight, Quote, Code, Component, Megaphone, PenTool } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { ProjectCard } from '@/components/portfolio/ProjectCard';
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
   {
+    slug: 'project-alpha',
     title: 'Project Alpha',
     description: 'A complete branding and web development project for a leading tech startup.',
-    image: 'https://placehold.co/600x400.png',
+    image: 'https://placehold.co/600x450.png',
     hint: 'tech startup',
     tags: ['UI/UX Design', 'Web Development'],
-    link: '#',
   },
   {
+    slug: 'project-beta',
     title: 'Project Beta',
     description: 'E-commerce platform with a custom design system and seamless user experience.',
-    image: 'https://placehold.co/600x400.png',
+    image: 'https://placehold.co/600x450.png',
     hint: 'ecommerce platform',
     tags: ['E-commerce', 'Branding'],
-    link: '#',
   },
   {
+    slug: 'project-gamma',
     title: 'Project Gamma',
     description: 'Digital marketing campaign that increased lead generation by 300%.',
-    image: 'https://placehold.co/600x400.png',
+    image: 'https://placehold.co/600x450.png',
     hint: 'digital marketing',
     tags: ['Marketing', 'SEO'],
-    link: '#',
-  },
-    {
-    title: 'Project Delta',
-    description: 'Mobile app for a fintech company, with a focus on security and user experience.',
-    image: 'https://placehold.co/600x400.png',
-    hint: 'fintech app',
-    tags: ['Mobile App', 'Fintech'],
-    link: '#',
-  },
-    {
-    title: 'Project Epsilon',
-    description: 'AI-powered analytics dashboard for a major logistics corporation.',
-    image: 'https://placehold.co/600x400.png',
-    hint: 'analytics dashboard',
-    tags: ['AI', 'Data Visualization'],
-    link: '#',
-  },
-    {
-    title: 'Project Phi',
-    description: 'A beautiful and performant marketing website for a SaaS product.',
-    image: 'https://placehold.co/600x400.png',
-    hint: 'saas website',
-    tags: ['Web Design', 'SaaS'],
-    link: '#',
   },
 ];
 
@@ -91,82 +72,79 @@ const clients = [
   { name: 'Microsoft', logo: 'https://placehold.co/150x50.png', hint: 'microsoft logo' },
 ];
 
-const bentoItems = [
-    {
-        icon: Award,
-        title: "10+ Years of Experience",
-        description: "Proven expertise in delivering high-quality digital products.",
-        className: "md:col-span-2",
-    },
-    {
-        icon: Users,
-        title: "50+ Happy Clients",
-        description: "From startups to Fortune 500 companies.",
-        className: "md:col-span-1",
-    },
-    {
-        icon: Briefcase,
-        title: "100+ Projects Completed",
-        description: "A diverse portfolio of successful projects.",
-        className: "md:col-span-1",
-    },
-    {
-        icon: Zap,
-        title: "Agile & Fast",
-        description: "We work fast and adapt to your needs for a quick turnaround.",
-        className: "md:col-span-2",
-    },
-];
-
 
 function Hero() {
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo(".hero-title-char", 
+        { y: 100, opacity: 0 }, 
+        { y: 0, opacity: 1, stagger: 0.05, duration: 1, ease: 'power4.out' }
+      );
+      gsap.fromTo(".hero-p", 
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, delay: 0.5, ease: 'power4.out' }
+      );
+       gsap.fromTo(".hero-buttons", 
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, delay: 0.7, ease: 'power4.out' }
+      );
+       gsap.fromTo(".hero-image", 
+        { y: 100, opacity: 0, scale: 0.9 },
+        { y: 0, opacity: 1, scale: 1, duration: 1.2, delay: 0.9, ease: 'power4.out' }
+      );
+
+      gsap.to(".hero-image", {
+        y: -50,
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        }
+      });
+
+    }, heroRef);
+    return () => ctx.revert();
+  }, []);
+
+  const title = "We Craft Digital Masterpieces";
+
   return (
-    <section className="relative py-20 md:py-32 overflow-hidden">
-        <GridPattern
-            width={40}
-            height={40}
-            x={-1}
-            y={-1}
-            className="absolute inset-0 h-full w-full stroke-gray-500/30 [mask-image:radial-gradient(at_top_left,white,transparent_75%)]"
-        />
-      <div className="container mx-auto px-4 z-10 relative">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="text-center md:text-left">
-                <h1 className="font-headline text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter">
-                We Craft Digital <br className="hidden md:block" /> Masterpieces
-                </h1>
-                <p className="mt-6 max-w-3xl text-lg md:text-xl text-muted-foreground">
-                CodeLits is a digital product studio that partners with ambitious startups and established brands to create exceptional web and mobile experiences.
-                </p>
-                <div className="mt-8 flex justify-center md:justify-start gap-4">
-                <Button asChild size="lg">
-                    <Link href="/portfolio">View Our Work</Link>
-                </Button>
-                <Button asChild size="lg" variant="outline">
-                    <Link href="/contact">Get in Touch</Link>
-                </Button>
-                </div>
-            </div>
-            <div className="relative">
-                <Image
-                    src="https://placehold.co/800x600.png"
-                    alt="Digital masterpiece"
-                    width={800}
-                    height={600}
-                    className="rounded-xl shadow-2xl transform hover:scale-105 transition-transform duration-500"
-                    data-ai-hint="digital agency office"
-                />
-            </div>
+    <section ref={heroRef} className="relative py-20 md:py-32 overflow-hidden">
+      <div className="absolute inset-0 h-full w-full bg-transparent bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_60%,transparent_100%)]"></div>
+      <div className="container mx-auto px-4 z-10 relative text-center">
+        <h1 className="font-headline text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter">
+          {title.split(" ").map((word, i) => (
+            <span key={i} className="inline-block mr-3 md:mr-4">
+              {word.split("").map((char, j) => (
+                <span key={j} className="hero-title-char inline-block">{char}</span>
+              ))}
+            </span>
+          ))}
+        </h1>
+        <p className="hero-p mt-6 max-w-2xl mx-auto text-lg md:text-xl text-muted-foreground">
+          CodeLits is a digital product studio that partners with ambitious startups and established brands to create exceptional web and mobile experiences.
+        </p>
+        <div className="hero-buttons mt-8 flex justify-center gap-4">
+          <Button asChild size="lg">
+            <Link href="/portfolio">View Our Work</Link>
+          </Button>
+          <Button asChild size="lg" variant="outline">
+            <Link href="/contact">Get in Touch</Link>
+          </Button>
         </div>
         
-        <div className="mt-24 max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4">
-            {bentoItems.map((item) => (
-                <Card key={item.title} className={`${item.className} p-6 bg-card/50 backdrop-blur-sm text-left border-primary/20 hover:border-primary/50 transition-colors`}>
-                    <item.icon className="w-8 h-8 text-primary mb-4" />
-                    <h3 className="font-headline text-xl font-bold">{item.title}</h3>
-                    <p className="text-muted-foreground mt-2">{item.description}</p>
-                </Card>
-            ))}
+        <div className="hero-image mt-24 relative">
+          <Image
+              src="https://placehold.co/1200x600.png"
+              alt="Digital masterpiece"
+              width={1200}
+              height={600}
+              className="rounded-xl shadow-2xl w-full max-w-5xl mx-auto"
+              data-ai-hint="digital agency dashboard"
+          />
         </div>
       </div>
     </section>
@@ -210,32 +188,7 @@ function FeaturedProjects() {
         </div>
         <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects.map((project) => (
-            <Card key={project.title} className="flex flex-col overflow-hidden group border-2 border-transparent hover:border-primary transition-all duration-300 transform hover:-translate-y-2">
-              <CardHeader className="p-0">
-                <Image
-                  src={project.image}
-                  alt={project.title}
-                  width={600}
-                  height={400}
-                  className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300"
-                  data-ai-hint={project.hint}
-                />
-              </CardHeader>
-              <CardContent className="flex-grow p-6">
-                 <div className="flex flex-wrap gap-x-3 gap-y-1 mb-4">
-                    {project.tags.map(tag => (
-                        <div key={tag} className="text-xs uppercase text-primary font-semibold tracking-wider">{tag}</div>
-                    ))}
-                </div>
-                <CardTitle className="font-headline text-xl">{project.title}</CardTitle>
-                <CardDescription className="mt-2">{project.description}</CardDescription>
-              </CardContent>
-              <CardFooter className="p-6 pt-0">
-                <Button asChild variant="link" className="p-0 h-auto">
-                    <Link href="/portfolio">View Case Study <ArrowRight className="ml-2 h-4 w-4" /></Link>
-                </Button>
-              </CardFooter>
-            </Card>
+            <ProjectCard key={project.slug} project={project} />
           ))}
         </div>
         <div className="mt-12 text-center">
@@ -300,22 +253,20 @@ function Testimonials() {
                         {testimonials.map((testimonial, index) => (
                             <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
                                 <div className="p-2">
-                                    <Card className="h-full bg-card/50 backdrop-blur-sm border-primary/20">
-                                        <CardContent className="p-8 flex flex-col items-start text-left justify-center h-full">
-                                            <Quote className="w-8 h-8 text-primary mb-4" />
-                                            <p className="text-lg italic flex-grow">&quot;{testimonial.quote}&quot;</p>
-                                            <div className="mt-6 flex items-center gap-4">
-                                                <Avatar>
-                                                    <AvatarImage src={testimonial.image} alt={testimonial.name} data-ai-hint={testimonial.hint} />
-                                                    <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
-                                                </Avatar>
-                                                <div>
-                                                    <p className="font-semibold">{testimonial.name}</p>
-                                                    <p className="text-sm text-muted-foreground">{testimonial.title}</p>
-                                                </div>
+                                    <div className="h-full bg-card/50 backdrop-blur-sm border-primary/20 rounded-lg p-8 flex flex-col items-start text-left justify-center">
+                                        <Quote className="w-8 h-8 text-primary mb-4" />
+                                        <p className="text-lg italic flex-grow">&quot;{testimonial.quote}&quot;</p>
+                                        <div className="mt-6 flex items-center gap-4">
+                                            <Avatar>
+                                                <AvatarImage src={testimonial.image} alt={testimonial.name} data-ai-hint={testimonial.hint} />
+                                                <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
+                                            </Avatar>
+                                            <div>
+                                                <p className="font-semibold">{testimonial.name}</p>
+                                                <p className="text-sm text-muted-foreground">{testimonial.title}</p>
                                             </div>
-                                        </CardContent>
-                                    </Card>
+                                        </div>
+                                    </div>
                                 </div>
                             </CarouselItem>
                         ))}
