@@ -7,6 +7,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { Card, CardContent } from '@/components/ui/card';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -247,20 +249,20 @@ function FeaturedWork() {
 
 function ServicesOverview() {
     const services = [
-        { icon: PenTool, title: "UI/UX Design", description: "Crafting intuitive and beautiful user interfaces that users love." },
-        { icon: Code, title: "Web Development", description: "Building responsive, high-performance, and scalable websites." },
-        { icon: Component, title: "App Development", description: "Creating engaging mobile apps for both iOS and Android platforms." },
-        { icon: Megaphone, title: "Digital Marketing", description: "Driving growth and user acquisition with targeted marketing strategies." },
+        { icon: PenTool, title: "UI/UX Design", description: "Crafting intuitive and beautiful user interfaces that users love.", image: "https://placehold.co/500x500.png", hint: "abstract design" },
+        { icon: Code, title: "Web Development", description: "Building responsive, high-performance, and scalable websites.", image: "https://placehold.co/500x500.png", hint: "abstract code" },
+        { icon: Component, title: "App Development", description: "Creating engaging mobile apps for both iOS and Android platforms.", image: "https://placehold.co/500x500.png", hint: "abstract app" },
+        { icon: Megaphone, title: "Digital Marketing", description: "Driving growth and user acquisition with targeted marketing strategies.", image: "https://placehold.co/500x500.png", hint: "abstract marketing" },
     ];
     const sectionRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            gsap.fromTo('.service-item',
-                { opacity: 0, x: -50 },
+            gsap.fromTo('.service-card',
+                { opacity: 0, y: 50 },
                 {
                     opacity: 1,
-                    x: 0,
+                    y: 0,
                     duration: 0.8,
                     ease: 'power3.out',
                     stagger: 0.2,
@@ -277,21 +279,31 @@ function ServicesOverview() {
     return (
         <section ref={sectionRef} className="py-20 md:py-28">
             <div className="container mx-auto px-4">
-                <div className="text-center">
+                <div className="text-center mb-12">
                     <h2 className="font-headline text-3xl md:text-4xl font-bold">Our Capabilities</h2>
                     <p className="mt-4 max-w-2xl mx-auto text-muted-foreground">
                         We offer a comprehensive suite of digital services to bring your vision to life.
                     </p>
                 </div>
-                <div className="mt-12 max-w-4xl mx-auto space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {services.map(service => (
-                        <div key={service.title} className="service-item border border-border/50 rounded-lg p-6 flex items-start gap-6 hover:border-primary/50 hover:bg-card/50 transition-all duration-300">
-                            <div className="p-3 bg-primary/10 text-primary rounded-lg ring-4 ring-primary/5">
-                                <service.icon className="w-6 h-6" />
-                            </div>
-                            <div>
-                                <h3 className="font-headline text-xl font-semibold">{service.title}</h3>
-                                <p className="mt-1 text-muted-foreground">{service.description}</p>
+                        <div key={service.title} className="service-card group relative overflow-hidden rounded-xl border border-border/20 hover:border-primary/50 transition-all duration-300">
+                             <Image
+                                src={service.image}
+                                alt={service.title}
+                                width={500}
+                                height={500}
+                                className="absolute inset-0 w-full h-full object-cover opacity-10 group-hover:opacity-20 transition-opacity duration-300"
+                                data-ai-hint={service.hint}
+                            />
+                            <div className="relative z-10 p-8 h-full flex flex-col bg-gradient-to-t from-background via-background/80 to-transparent">
+                                <div className="p-3 bg-primary/10 text-primary rounded-lg ring-4 ring-primary/5 w-min mb-4">
+                                    <service.icon className="w-6 h-6" />
+                                </div>
+                                <div className="flex-grow">
+                                    <h3 className="font-headline text-xl font-semibold">{service.title}</h3>
+                                    <p className="mt-2 text-muted-foreground">{service.description}</p>
+                                </div>
                             </div>
                         </div>
                     ))}
@@ -307,18 +319,16 @@ function Testimonials() {
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            gsap.fromTo('.testimonial-card',
-                { opacity: 0, y: 100, scale: 0.9 },
+            gsap.fromTo(sectionRef.current,
+                { opacity: 0, y: 100 },
                 {
                     opacity: 1,
                     y: 0,
-                    scale: 1,
                     duration: 1,
                     ease: 'power4.out',
-                    stagger: 0.2,
                     scrollTrigger: {
                         trigger: sectionRef.current,
-                        start: 'top 70%',
+                        start: 'top 80%',
                     }
                 }
             )
@@ -329,32 +339,46 @@ function Testimonials() {
     return (
         <section ref={sectionRef} className="py-20 md:py-28 bg-card/50">
             <div className="container mx-auto px-4">
-                <div className="text-center">
+                <div className="text-center mb-12">
                     <h2 className="font-headline text-3xl md:text-4xl font-bold">What Our Clients Say</h2>
                     <p className="mt-4 max-w-2xl mx-auto text-muted-foreground">
                         We are proud to have earned the trust of our amazing clients.
                     </p>
                 </div>
-                <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                 <Carousel
+                  opts={{
+                    align: "start",
+                    loop: true,
+                  }}
+                  className="w-full max-w-5xl mx-auto"
+                >
+                  <CarouselContent>
                     {testimonials.map((testimonial, index) => (
-                        <div key={index} className="testimonial-card">
-                             <div className="h-full bg-card/50 backdrop-blur-sm border-primary/20 rounded-lg p-8 flex flex-col items-start text-left justify-center">
-                                <Quote className="w-8 h-8 text-primary mb-4" />
-                                <p className="text-lg italic flex-grow">&quot;{testimonial.quote}&quot;</p>
-                                <div className="mt-6 flex items-center gap-4">
-                                    <Avatar>
+                      <CarouselItem key={index} className="md:basis-1/2">
+                        <div className="p-4">
+                          <Card className="h-full bg-card/50 backdrop-blur-sm border-primary/20 rounded-lg shadow-lg">
+                            <CardContent className="p-8 flex flex-col items-start text-left justify-center h-full">
+                                <Quote className="w-10 h-10 text-primary mb-6" />
+                                <p className="text-lg italic flex-grow mb-6">&quot;{testimonial.quote}&quot;</p>
+                                <div className="flex items-center gap-4">
+                                    <Avatar className="w-12 h-12">
                                         <AvatarImage src={testimonial.image} alt={testimonial.name} data-ai-hint={testimonial.hint} />
                                         <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
                                     </Avatar>
                                     <div>
-                                        <p className="font-semibold">{testimonial.name}</p>
+                                        <p className="font-semibold text-lg">{testimonial.name}</p>
                                         <p className="text-sm text-muted-foreground">{testimonial.title}</p>
                                     </div>
                                 </div>
-                            </div>
+                            </CardContent>
+                          </Card>
                         </div>
+                      </CarouselItem>
                     ))}
-                </div>
+                  </CarouselContent>
+                  <CarouselPrevious className="hidden md:flex -left-12" />
+                  <CarouselNext className="hidden md:flex -right-12" />
+                </Carousel>
             </div>
         </section>
     );

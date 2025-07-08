@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Code, Menu, Briefcase, Users, FileText, PencilLine, Phone, Bot, ArrowRight, Wrench } from 'lucide-react';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { cn } from '@/lib/utils';
 
 const navLinks = [
   { href: '/portfolio', label: 'Work' },
@@ -26,10 +27,26 @@ const mobileNavLinks = [
 
 export function Header() {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto flex h-16 max-w-screen-2xl items-center justify-between px-4">
+    <header className="sticky top-0 z-50 w-full p-2 md:p-4 transition-all duration-300">
+      <div
+        className={cn(
+          "container mx-auto flex h-16 max-w-screen-2xl items-center justify-between px-4 transition-all duration-300 ease-in-out",
+          isScrolled ? "rounded-2xl border border-border/40 bg-background/80 backdrop-blur-lg shadow-xl" : "bg-transparent"
+        )}
+      >
         <Link href="/" className="flex items-center gap-2">
           <Code className="h-6 w-6 text-primary" />
           <span className="font-headline text-lg font-bold">CodeLits Studio</span>
