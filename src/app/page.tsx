@@ -2,32 +2,17 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Quote, Code, Component, Megaphone, PenTool } from 'lucide-react';
+import { ArrowRight, Quote, CheckCircle2, Star } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { GridPattern } from '@/components/decoration/GridPattern';
+import { featuredProjects } from '@/lib/projects';
 
 gsap.registerPlugin(ScrollTrigger);
-
-const featuredWork = [
-  {
-    title: 'RMS',
-    description: 'A comprehensive management system for educational institutions.',
-    image: 'https://placehold.co/1200x800.png',
-    hint: 'school dashboard',
-    link: 'https://rms.codelitsstudio.com/',
-  },
-  {
-    title: 'Playxio',
-    description: 'A modern and sleek gaming platform for enthusiasts.',
-    image: 'https://placehold.co/1200x800.png',
-    hint: 'gaming platform',
-    link: 'https://playxio.xyz/',
-  },
-];
 
 const testimonials = [
     {
@@ -68,25 +53,43 @@ function Hero() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.fromTo(".hero-title-char", 
+      const tl = gsap.timeline({
+          defaults: { ease: 'power4.out', duration: 1.2 }
+      });
+      tl.fromTo(".hero-title-char", 
         { y: 100, opacity: 0 }, 
-        { y: 0, opacity: 1, stagger: 0.05, duration: 1, ease: 'power4.out' }
-      );
-      gsap.fromTo(".hero-p", 
+        { y: 0, opacity: 1, stagger: 0.05, duration: 1 }
+      )
+      .fromTo(".hero-p", 
         { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, delay: 0.5, ease: 'power4.out' }
-      );
-       gsap.fromTo(".hero-buttons", 
+        { y: 0, opacity: 1, duration: 1 },
+        "-=0.8"
+      )
+      .fromTo(".hero-buttons", 
         { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, delay: 0.7, ease: 'power4.out' }
-      );
-       gsap.fromTo(".hero-image", 
+        { y: 0, opacity: 1, duration: 1 },
+        "-=0.8"
+      )
+      .fromTo(".hero-image",
         { y: 100, opacity: 0, scale: 0.9 },
-        { y: 0, opacity: 1, scale: 1, duration: 1.2, delay: 0.9, ease: 'power4.out' }
+        { y: 0, opacity: 1, scale: 1, duration: 1.5, ease: 'elastic.out(1, 0.75)' },
+        "-=0.8"
       );
 
       gsap.to(".hero-image", {
-        y: -50,
+        yPercent: -15,
+        ease: "power1.inOut",
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        }
+      });
+       gsap.to(".grid-pattern", {
+        yPercent: 50,
+        opacity: 0.3,
+        ease: "power1.inOut",
         scrollTrigger: {
           trigger: heroRef.current,
           start: "top top",
@@ -102,8 +105,14 @@ function Hero() {
   const title = "We Craft Digital Masterpieces";
 
   return (
-    <section ref={heroRef} className="relative py-20 md:py-32 overflow-hidden">
-      <div className="absolute inset-0 h-full w-full bg-transparent bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_60%,transparent_100%)]"></div>
+    <section ref={heroRef} className="relative py-20 md:py-32 overflow-hidden bg-background">
+       <GridPattern
+        width={40}
+        height={40}
+        x={-1}
+        y={-1}
+        className="grid-pattern absolute -top-1/4 left-0 h-full w-full stroke-primary/10 [mask-image:linear-gradient(to_bottom,white_10%,transparent_90%)]"
+      />
       <div className="container mx-auto px-4 z-10 relative text-center">
         <h1 className="font-headline text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter">
           {title.split(" ").map((word, i) => (
@@ -126,13 +135,14 @@ function Hero() {
           </Button>
         </div>
         
-        <div className="hero-image mt-24 relative">
+        <div className="hero-image mt-24 relative max-w-5xl mx-auto aspect-[12/6] group">
+          <div className="absolute inset-0 rounded-2xl bg-primary/10 transform-gpu transition-all duration-500 group-hover:scale-[1.02] group-hover:-translate-y-2" />
           <Image
               src="https://placehold.co/1200x600.png"
               alt="Digital masterpiece"
               width={1200}
               height={600}
-              className="rounded-xl shadow-2xl w-full max-w-5xl mx-auto"
+              className="rounded-xl shadow-2xl w-full h-full object-cover object-top"
               data-ai-hint="digital agency dashboard"
           />
         </div>
@@ -160,7 +170,7 @@ function Clients() {
     }, []);
 
     return (
-        <section ref={clientsRef} className="py-12">
+        <section ref={clientsRef} className="py-12 bg-background">
             <div className="container mx-auto px-4">
                 <h3 className="text-center text-sm font-semibold text-muted-foreground uppercase tracking-wider">
                     Powering the world&apos;s most innovative companies
@@ -190,14 +200,97 @@ function FeaturedWork() {
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            gsap.fromTo('.featured-work-card',
-                { opacity: 0, y: 100 },
+            gsap.utils.toArray<HTMLDivElement>('.featured-work-card').forEach((card, i) => {
+                gsap.fromTo(card,
+                    { opacity: 0, y: 100 },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: 1,
+                        ease: 'power4.out',
+                        scrollTrigger: {
+                            trigger: card,
+                            start: 'top 85%',
+                        }
+                    }
+                );
+            });
+        }, sectionRef);
+        return () => ctx.revert();
+    }, []);
+
+    return (
+        <section ref={sectionRef} id="work" className="py-20 md:py-28 bg-card/50">
+            <div className="container mx-auto px-4">
+                <div className="text-center mb-16">
+                    <h2 className="font-headline text-3xl md:text-4xl font-bold">Our Masterpieces</h2>
+                    <p className="mt-4 max-w-2xl mx-auto text-muted-foreground">
+                        A look at some of our favorite projects. We don't just build websites, we build digital experiences.
+                    </p>
+                </div>
+                <div className="space-y-24">
+                    {featuredProjects.map((project, index) => (
+                        <div key={project.slug} className="featured-work-card grid md:grid-cols-2 gap-12 items-center">
+                            <div className={`relative aspect-video rounded-lg shadow-2xl group ${index % 2 === 0 ? 'md:order-1' : 'md:order-2'}`}>
+                                <div className="absolute inset-0 bg-muted rounded-lg flex items-center justify-center"><p>Loading preview...</p></div>
+                                <iframe
+                                    src={project.link}
+                                    title={project.title}
+                                    className="w-full h-full border-2 border-border/60 rounded-lg relative z-10"
+                                    loading="lazy"
+                                    sandbox="allow-scripts allow-same-origin"
+                                />
+                                <div className="absolute -inset-2 bg-primary/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
+                            </div>
+                            <div className={`text-left ${index % 2 === 0 ? 'md:order-2' : 'md:order-1'}`}>
+                                <h3 className="font-headline text-3xl font-bold">{project.title}</h3>
+                                <p className="mt-4 text-lg text-muted-foreground">{project.description}</p>
+                                <Button asChild size="lg" className="mt-6">
+                                    <Link href={`/portfolio/${project.slug}`}>View Project <ArrowRight className="ml-2" /></Link>
+                                </Button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </section>
+    );
+}
+
+function Capabilities() {
+    const capabilities = [
+        { icon: CheckCircle2, title: "UI/UX Design", description: "Crafting intuitive and beautiful user interfaces that users love." },
+        { icon: CheckCircle2, title: "Web Development", description: "Building responsive, high-performance, and scalable websites." },
+        { icon: CheckCircle2, title: "App Development", description: "Creating engaging mobile apps for both iOS and Android platforms." },
+        { icon: CheckCircle2, title: "Digital Marketing", description: "Driving growth and user acquisition with targeted marketing strategies." },
+        { icon: CheckCircle2, title: "E-commerce Solutions", description: "Building robust e-commerce platforms that provide a seamless shopping experience." },
+        { icon: CheckCircle2, title: "SEO & Content Strategy", description: "Improving search engine rankings and attracting organic traffic." },
+    ];
+    const sectionRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const ctx = gsap.context(() => {
+            gsap.fromTo('.capability-item',
+                { opacity: 0, x: -30 },
                 {
                     opacity: 1,
-                    y: 0,
-                    stagger: 0.2,
-                    duration: 1,
-                    ease: 'power4.out',
+                    x: 0,
+                    duration: 0.8,
+                    ease: 'power3.out',
+                    stagger: 0.1,
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start: 'top 70%',
+                    }
+                }
+            );
+            gsap.fromTo('.capabilities-image',
+                { opacity: 0, scale: 0.8 },
+                {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 1.2,
+                    ease: 'elastic.out(1, 0.75)',
                     scrollTrigger: {
                         trigger: sectionRef.current,
                         start: 'top 70%',
@@ -209,110 +302,43 @@ function FeaturedWork() {
     }, []);
 
     return (
-        <section ref={sectionRef} id="work" className="py-20 md:py-28 bg-card/50">
+        <section ref={sectionRef} className="py-20 md:py-28 bg-background">
             <div className="container mx-auto px-4">
-                <div className="text-center mb-12">
-                    <h2 className="font-headline text-3xl md:text-4xl font-bold">Our Masterpieces</h2>
-                    <p className="mt-4 max-w-2xl mx-auto text-muted-foreground">
-                        A look at some of our favorite projects.
-                    </p>
-                </div>
-                <div className="space-y-24">
-                    {featuredWork.map((project, index) => (
-                        <div key={project.title} className="featured-work-card grid md:grid-cols-2 gap-12 items-center">
-                            <div className={`relative ${index % 2 === 0 ? 'md:order-1' : 'md:order-2'}`}>
-                                <Link href={project.link} target="_blank">
-                                    <Image
-                                        src={project.image}
-                                        alt={project.title}
-                                        width={1200}
-                                        height={800}
-                                        className="rounded-lg shadow-2xl aspect-[4/3] object-cover object-top hover:scale-105 transition-transform duration-500"
-                                        data-ai-hint={project.hint}
-                                    />
-                                </Link>
-                            </div>
-                            <div className={`text-left ${index % 2 === 0 ? 'md:order-2' : 'md:order-1'}`}>
-                                <h3 className="font-headline text-3xl font-bold">{project.title}</h3>
-                                <p className="mt-4 text-lg text-muted-foreground">{project.description}</p>
-                                <Button asChild size="lg" variant="link" className="p-0 mt-4">
-                                    <Link href={project.link} target="_blank">Visit Website <ArrowRight className="ml-2" /></Link>
-                                </Button>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
-}
-
-function ServicesOverview() {
-    const services = [
-        { icon: PenTool, title: "UI/UX Design", description: "Crafting intuitive and beautiful user interfaces that users love.", image: "https://placehold.co/500x500.png", hint: "abstract design" },
-        { icon: Code, title: "Web Development", description: "Building responsive, high-performance, and scalable websites.", image: "https://placehold.co/500x500.png", hint: "abstract code" },
-        { icon: Component, title: "App Development", description: "Creating engaging mobile apps for both iOS and Android platforms.", image: "https://placehold.co/500x500.png", hint: "abstract app" },
-        { icon: Megaphone, title: "Digital Marketing", description: "Driving growth and user acquisition with targeted marketing strategies.", image: "https://placehold.co/500x500.png", hint: "abstract marketing" },
-    ];
-    const sectionRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const ctx = gsap.context(() => {
-            gsap.fromTo('.service-card',
-                { opacity: 0, y: 50 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.8,
-                    ease: 'power3.out',
-                    stagger: 0.2,
-                    scrollTrigger: {
-                        trigger: sectionRef.current,
-                        start: 'top 70%',
-                    }
-                }
-            )
-        }, sectionRef);
-        return () => ctx.revert();
-    }, []);
-
-    return (
-        <section ref={sectionRef} className="py-20 md:py-28">
-            <div className="container mx-auto px-4">
-                <div className="text-center mb-12">
+                <div className="text-center mb-16">
                     <h2 className="font-headline text-3xl md:text-4xl font-bold">Our Capabilities</h2>
                     <p className="mt-4 max-w-2xl mx-auto text-muted-foreground">
                         We offer a comprehensive suite of digital services to bring your vision to life.
                     </p>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    {services.map(service => (
-                        <div key={service.title} className="service-card group relative overflow-hidden rounded-xl border border-border/20 hover:border-primary/50 transition-all duration-300">
-                             <Image
-                                src={service.image}
-                                alt={service.title}
-                                width={500}
-                                height={500}
-                                className="absolute inset-0 w-full h-full object-cover opacity-10 group-hover:opacity-20 transition-opacity duration-300"
-                                data-ai-hint={service.hint}
-                            />
-                            <div className="relative z-10 p-8 h-full flex flex-col bg-gradient-to-t from-background via-background/80 to-transparent">
-                                <div className="p-3 bg-primary/10 text-primary rounded-lg ring-4 ring-primary/5 w-min mb-4">
-                                    <service.icon className="w-6 h-6" />
+                <div className="grid md:grid-cols-2 gap-12 items-center">
+                    <div className="space-y-6">
+                        {capabilities.map(service => (
+                            <div key={service.title} className="capability-item flex items-start gap-4">
+                                <div className="p-1 bg-primary/10 text-primary rounded-full mt-1">
+                                    <service.icon className="w-5 h-5" />
                                 </div>
-                                <div className="flex-grow">
-                                    <h3 className="font-headline text-xl font-semibold">{service.title}</h3>
-                                    <p className="mt-2 text-muted-foreground">{service.description}</p>
+                                <div>
+                                    <h3 className="font-semibold text-lg">{service.title}</h3>
+                                    <p className="text-muted-foreground">{service.description}</p>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
+                    <div className="capabilities-image relative aspect-square">
+                        <Image
+                            src="https://placehold.co/800x800.png"
+                            alt="Capabilities"
+                            width={800}
+                            height={800}
+                            className="rounded-2xl object-cover w-full h-full"
+                            data-ai-hint="digital agency capabilities"
+                        />
+                    </div>
                 </div>
             </div>
         </section>
     );
 }
-
 
 function Testimonials() {
     const sectionRef = useRef<HTMLDivElement>(null);
@@ -340,7 +366,10 @@ function Testimonials() {
         <section ref={sectionRef} className="py-20 md:py-28 bg-card/50">
             <div className="container mx-auto px-4">
                 <div className="text-center mb-12">
-                    <h2 className="font-headline text-3xl md:text-4xl font-bold">What Our Clients Say</h2>
+                     <div className="inline-block p-3 bg-primary/10 rounded-full">
+                        <Star className="w-8 h-8 text-primary" />
+                    </div>
+                    <h2 className="font-headline text-3xl md:text-4xl font-bold mt-4">What Our Clients Say</h2>
                     <p className="mt-4 max-w-2xl mx-auto text-muted-foreground">
                         We are proud to have earned the trust of our amazing clients.
                     </p>
@@ -354,14 +383,14 @@ function Testimonials() {
                 >
                   <CarouselContent>
                     {testimonials.map((testimonial, index) => (
-                      <CarouselItem key={index} className="md:basis-1/2">
-                        <div className="p-4">
-                          <Card className="h-full bg-card/50 backdrop-blur-sm border-primary/20 rounded-lg shadow-lg">
+                      <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                        <div className="p-2">
+                          <Card className="h-full bg-background/50 backdrop-blur-sm border-border/20 rounded-lg shadow-lg group">
                             <CardContent className="p-8 flex flex-col items-start text-left justify-center h-full">
-                                <Quote className="w-10 h-10 text-primary mb-6" />
-                                <p className="text-lg italic flex-grow mb-6">&quot;{testimonial.quote}&quot;</p>
+                                <Quote className="w-8 h-8 text-primary/70 mb-6 transition-transform duration-300 group-hover:scale-110" />
+                                <p className="text-md italic flex-grow mb-6">&quot;{testimonial.quote}&quot;</p>
                                 <div className="flex items-center gap-4">
-                                    <Avatar className="w-12 h-12">
+                                    <Avatar className="w-12 h-12 border-2 border-primary/50">
                                         <AvatarImage src={testimonial.image} alt={testimonial.name} data-ai-hint={testimonial.hint} />
                                         <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
                                     </Avatar>
@@ -384,14 +413,13 @@ function Testimonials() {
     );
 }
 
-
 export default function Home() {
   return (
     <>
       <Hero />
       <Clients />
       <FeaturedWork />
-      <ServicesOverview />
+      <Capabilities />
       <Testimonials />
     </>
   );
