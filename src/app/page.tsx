@@ -4,14 +4,15 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Quote, CheckCircle2, Star } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { GridPattern } from '@/components/decoration/GridPattern';
-import { featuredProjects } from '@/lib/projects';
+import { featuredProjects, type Project } from '@/lib/projects';
 import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -196,6 +197,43 @@ function Clients() {
     );
 }
 
+const ProjectShowcaseItem = ({ project, index }: { project: Project, index: number }) => {
+    const [isLoaded, setIsLoaded] = useState(false);
+
+    return (
+        <div className="featured-project-item grid md:grid-cols-2 gap-8 md:gap-16 items-center">
+            <div className={`relative aspect-[16/10] rounded-xl shadow-2xl bg-muted/30 overflow-hidden group transition-all duration-300 hover:scale-[1.02] hover:shadow-primary/20 ${index % 2 === 1 ? 'md:order-last' : ''}`}>
+                <div className={cn(
+                    "absolute inset-0 bg-muted flex items-center justify-center transition-opacity duration-500 z-10",
+                    isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'
+                )}>
+                    <p className="text-muted-foreground text-sm">Loading Live Preview...</p>
+                </div>
+                <iframe
+                    src={project.link}
+                    title={project.title}
+                    className={cn("w-full h-full border-0 transition-opacity duration-1000", isLoaded ? 'opacity-100' : 'opacity-0')}
+                    loading="lazy"
+                    onLoad={() => setIsLoaded(true)}
+                    sandbox="allow-scripts allow-same-origin"
+                />
+            </div>
+            <div className="details">
+                <h3 className="font-headline text-2xl md:text-3xl font-bold">{project.title}</h3>
+                <div className="flex flex-wrap gap-2 my-4">
+                    {project.tags.map(tag => (
+                        <Badge key={tag} variant="secondary">{tag}</Badge>
+                    ))}
+                </div>
+                <p className="text-muted-foreground">{project.description}</p>
+                <Button asChild variant="outline" className="mt-8">
+                    <Link href={`/portfolio/${project.slug}`}>Explore Project <ArrowRight className="ml-2" /></Link>
+                </Button>
+            </div>
+        </div>
+    );
+};
+
 function FeaturedWork() {
     const sectionRef = useRef<HTMLDivElement>(null);
 
@@ -239,33 +277,7 @@ function FeaturedWork() {
 
                 <div className="space-y-24 md:space-y-32">
                     {featuredProjects.map((project, index) => (
-                        <div key={project.slug} className="featured-project-item grid md:grid-cols-2 gap-8 md:gap-16 items-center">
-                            <div className={`relative aspect-[16/10] rounded-xl shadow-2xl bg-muted/30 overflow-hidden group transition-all duration-300 hover:scale-[1.02] hover:shadow-primary/20 ${index % 2 === 1 ? 'md:order-last' : ''}`}>
-                                <div className="absolute inset-0 bg-muted flex items-center justify-center">
-                                    <p className="text-muted-foreground text-sm">Loading Live Preview...</p>
-                                </div>
-                                <iframe
-                                    src={project.link}
-                                    title={project.title}
-                                    className="w-full h-full border-0 transition-opacity duration-500 opacity-0"
-                                    loading="lazy"
-                                    onLoad={(e) => e.currentTarget.style.opacity = '1'}
-                                    sandbox="allow-scripts allow-same-origin"
-                                />
-                            </div>
-                            <div className="details">
-                                <h3 className="font-headline text-2xl md:text-3xl font-bold">{project.title}</h3>
-                                <div className="flex flex-wrap gap-2 my-4">
-                                    {project.tags.map(tag => (
-                                        <Badge key={tag} variant="secondary">{tag}</Badge>
-                                    ))}
-                                </div>
-                                <p className="text-muted-foreground">{project.description}</p>
-                                <Button asChild variant="outline" className="mt-8">
-                                    <Link href={`/portfolio/${project.slug}`}>Explore Project <ArrowRight className="ml-2" /></Link>
-                                </Button>
-                            </div>
-                        </div>
+                       <ProjectShowcaseItem key={project.slug} project={project} index={index} />
                     ))}
                 </div>
 

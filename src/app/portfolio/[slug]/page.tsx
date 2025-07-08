@@ -1,13 +1,16 @@
-
+'use client';
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, ExternalLink, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, ExternalLink, AlertTriangle, Loader2 } from 'lucide-react';
 import { allProjects } from '@/lib/projects';
 import { Badge } from '@/components/ui/badge';
+import React, { useState } from 'react';
+import { cn } from '@/lib/utils';
 
 export default function ProjectDetailPage({ params }: { params: { slug: string } }) {
   const project = allProjects.find(p => p.slug === params.slug);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   if (!project) {
     return (
@@ -57,12 +60,22 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
       <div className="container mx-auto p-4 md:p-8 flex-grow flex flex-col">
         <div className="relative w-full flex-grow bg-muted/40 rounded-xl overflow-hidden shadow-2xl border">
           {canBeIframed ? (
-              <iframe
-                src={project.link}
-                title={project.title}
-                className="w-full h-full border-0"
-                sandbox="allow-scripts allow-same-origin"
-              />
+              <>
+                <div className={cn(
+                    "absolute inset-0 bg-muted flex flex-col items-center justify-center transition-opacity duration-500 z-10",
+                    isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'
+                )}>
+                    <Loader2 className="w-8 h-8 text-primary animate-spin mb-4" />
+                    <p className="text-muted-foreground">Loading Live Project...</p>
+                </div>
+                <iframe
+                  src={project.link}
+                  title={project.title}
+                  className={cn("w-full h-full border-0 transition-opacity duration-1000", isLoaded ? 'opacity-100' : 'opacity-0')}
+                  sandbox="allow-scripts allow-same-origin"
+                  onLoad={() => setIsLoaded(true)}
+                />
+              </>
             ) : (
               <div className="w-full h-full flex flex-col items-center justify-center text-center p-8">
                 <AlertTriangle className="w-16 h-16 text-primary/50 mb-4" />
