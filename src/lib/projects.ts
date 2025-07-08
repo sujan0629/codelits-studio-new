@@ -32,6 +32,36 @@ export const allProjects: Project[] = [
     tags: ['Web Design', 'Gaming', 'Community'],
   },
   {
+    slug: 'nexus',
+    title: 'Nexus',
+    description: 'A cutting-edge landing page for a modern digital service.',
+    longDescription: 'Nexus features a sleek, modern landing page designed to capture user interest and drive conversions for a next-generation digital service. It showcases fluid animations and a clean, professional aesthetic.',
+    image: 'https://placehold.co/1200x800.png',
+    hint: 'modern landing page',
+    link: 'https://nexus.codelitsstudio.com/',
+    tags: ['Web Design', 'Landing Page', 'SaaS'],
+  },
+  {
+    slug: 'eco-club',
+    title: 'Eco Club CCRCE',
+    description: 'An environmental awareness platform for a college club.',
+    longDescription: 'A dynamic website for the Eco Club of a college, dedicated to promoting environmental awareness, organizing events, and showcasing green initiatives. The platform serves as a central hub for members and visitors to learn about sustainability.',
+    image: 'https://placehold.co/1200x800.png',
+    hint: 'nature environment website',
+    link: 'https://ccrcecoclub.netlify.app/',
+    tags: ['Web Design', 'Community', 'Non-Profit'],
+  },
+  {
+    slug: 'e-commerce-clothing',
+    title: 'Urban Threads',
+    description: 'A stylish and functional e-commerce store for a clothing brand.',
+    longDescription: 'Urban Threads is a complete e-commerce solution for a modern clothing brand. It features a clean product grid, easy navigation, and a seamless checkout process, built to provide an excellent online shopping experience.',
+    image: 'https://placehold.co/1200x800.png',
+    hint: 'clothing store website',
+    link: 'https://e-commerce-site-demo-sujan.netlify.app/',
+    tags: ['E-commerce', 'Web Development', 'Fashion'],
+  },
+  {
     slug: 'project-gamma',
     title: 'Project Gamma',
     description: 'Digital marketing campaign that increased lead generation by 300%.',
@@ -73,4 +103,4 @@ export const allProjects: Project[] = [
   },
 ];
 
-export const featuredProjects = allProjects.filter(p => ['rms', 'playxio'].includes(p.slug));
+export const featuredProjects = allProjects.filter(p => ['rms', 'playxio', 'nexus', 'eco-club'].includes(p.slug));

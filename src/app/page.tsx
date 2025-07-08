@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { GridPattern } from '@/components/decoration/GridPattern';
 import { featuredProjects } from '@/lib/projects';
 import { Badge } from '@/components/ui/badge';
+import { ProjectCard } from '@/components/portfolio/ProjectCard';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -201,13 +202,13 @@ function FeaturedWork() {
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            gsap.utils.toArray<HTMLDivElement>('.featured-work-card').forEach((card) => {
+            gsap.utils.toArray<HTMLDivElement>('.featured-work-card').forEach((card, i) => {
                 gsap.fromTo(card,
                     { opacity: 0, y: 100 },
                     {
                         opacity: 1,
                         y: 0,
-                        duration: 1,
+                        duration: 0.8,
                         ease: 'power4.out',
                         scrollTrigger: {
                             trigger: card,
@@ -229,36 +230,19 @@ function FeaturedWork() {
                         A look at some of our favorite projects. We don't just build websites, we build digital experiences.
                     </p>
                 </div>
-                <div className="space-y-24 md:space-y-32">
-                    {featuredProjects.map((project) => (
-                        <div key={project.slug} className="featured-work-card">
-                            <div className="text-center max-w-2xl mx-auto">
-                                <h3 className="font-headline text-3xl font-bold">{project.title}</h3>
-                                <p className="mt-3 text-lg text-muted-foreground">{project.description}</p>
-                                 <div className="mt-4 flex flex-wrap justify-center gap-2">
-                                    {project.tags.map(tag => (
-                                        <Badge key={tag} variant="secondary">{tag}</Badge>
-                                    ))}
-                                </div>
-                            </div>
-                            <div className="relative aspect-video mt-8 rounded-lg shadow-2xl group max-w-7xl mx-auto p-4 bg-background/50 border border-border/20">
-                                <div className="absolute inset-0 bg-muted rounded-lg flex items-center justify-center"><p className="text-muted-foreground">Loading Live Preview...</p></div>
-                                <iframe
-                                    src={project.link}
-                                    title={project.title}
-                                    className="w-full h-full border-2 border-border/60 rounded-lg relative z-10"
-                                    loading="lazy"
-                                    sandbox="allow-scripts allow-same-origin"
-                                />
-                                <div className="absolute -inset-2 bg-primary/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
-                                <div className="absolute bottom-6 right-6 z-20">
-                                    <Button asChild size="lg">
-                                        <Link href={`/portfolio/${project.slug}`}>View Full Project <ArrowRight className="ml-2" /></Link>
-                                    </Button>
-                                </div>
-                            </div>
-                        </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                    {featuredProjects.map((project, index) => (
+                       <ProjectCard 
+                          key={project.slug} 
+                          project={project} 
+                          className="featured-work-card"
+                        />
                     ))}
+                </div>
+                 <div className="mt-16 text-center">
+                    <Button asChild size="lg" variant="outline">
+                        <Link href="/portfolio">View All Projects <ArrowRight className="ml-2" /></Link>
+                    </Button>
                 </div>
             </div>
         </section>

@@ -27,7 +27,7 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
   const canBeIframed = project.link.startsWith('http');
 
   return (
-    <div className="bg-background">
+    <div className="bg-background flex flex-col" style={{ height: 'calc(100vh - 80px)'}}>
       <div className="border-b bg-background/80 backdrop-blur-sm sticky top-[72px] z-20">
         <div className="container mx-auto flex h-24 items-center justify-between gap-4 px-4">
           <div className="flex-1 min-w-0">
@@ -54,8 +54,8 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
         </div>
       </div>
       
-      <div className="container mx-auto p-4 md:p-8">
-        <div className="relative aspect-[16/9] w-full bg-muted/40 rounded-xl overflow-hidden shadow-2xl border">
+      <div className="container mx-auto p-4 md:p-8 flex-grow flex flex-col">
+        <div className="relative w-full flex-grow bg-muted/40 rounded-xl overflow-hidden shadow-2xl border">
           {canBeIframed ? (
               <iframe
                 src={project.link}
@@ -76,10 +76,6 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
               </div>
             )
           }
-        </div>
-        <div className="mt-8 max-w-4xl mx-auto text-center py-8">
-            <h2 className="font-headline text-2xl font-bold">About the Project</h2>
-            <p className="mt-4 text-lg text-muted-foreground">{project.longDescription}</p>
         </div>
       </div>
     </div>
