@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import React, { useState } from "react";
 
 import { suggestPortfolioCopy, type SuggestPortfolioCopyOutput } from '@/ai/flows/suggest-portfolio-copy';
-import { z } from "genkit";
+import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
