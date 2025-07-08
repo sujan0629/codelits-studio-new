@@ -3,16 +3,25 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Code, Menu, Briefcase, Users, FileText, PencilLine, Phone, Bot } from 'lucide-react';
+import { Code, Menu, Briefcase, Users, FileText, PencilLine, Phone, Bot, ArrowRight, Wrench } from 'lucide-react';
 import React from 'react';
 
 const navLinks = [
-  { href: '/portfolio', label: 'Portfolio', icon: Briefcase },
-  { href: '/services', label: 'Services', icon: Users },
+  { href: '/portfolio', label: 'Work' },
+  { href: '/services', label: 'Services' },
+  { href: '/process', label: 'Process' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/team', label: 'About Us' },
+];
+
+const mobileNavLinks = [
+  { href: '/portfolio', label: 'Work', icon: Briefcase },
+  { href: '/services', label: 'Services', icon: Wrench },
   { href: '/process', label: 'Process', icon: FileText },
   { href: '/blog', label: 'Blog', icon: PencilLine },
-  { href: '/contact', label: 'Contact', icon: Phone },
+  { href: '/team', label: 'About Us', icon: Users },
   { href: '/admin/portfolio/new', label: 'AI Tool', icon: Bot },
+  { href: '/contact', label: 'Contact', icon: Phone },
 ];
 
 export function Header() {
@@ -37,6 +46,13 @@ export function Header() {
             </Link>
           ))}
         </nav>
+        
+        <div className="hidden md:flex items-center gap-4">
+             <Button asChild>
+                <Link href="/contact">Let's Talk <ArrowRight className="ml-2 h-4 w-4" /></Link>
+            </Button>
+        </div>
+
 
         <div className="md:hidden">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -48,12 +64,12 @@ export function Header() {
             </SheetTrigger>
             <SheetContent side="right">
               <div className="p-4">
-                 <Link href="/" className="flex items-center gap-2 mb-8">
+                 <Link href="/" className="flex items-center gap-2 mb-8" onClick={() => setIsOpen(false)}>
                   <Code className="h-6 w-6 text-primary" />
                   <span className="font-headline text-lg font-bold">CodeLits Studio</span>
                 </Link>
                 <nav className="flex flex-col gap-4">
-                  {navLinks.map((link) => (
+                  {mobileNavLinks.map((link) => (
                     <Link
                       key={link.href}
                       href={link.href}

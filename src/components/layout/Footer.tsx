@@ -25,7 +25,7 @@ export function Footer() {
             <div>
               <p className="font-semibold">Company</p>
               <nav className="mt-4 flex flex-col space-y-2 text-sm">
-                <Link href="/team" className="text-muted-foreground hover:text-primary">Team</Link>
+                <Link href="/team" className="text-muted-foreground hover:text-primary">About Us</Link>
                 <Link href="/process" className="text-muted-foreground hover:text-primary">Our Process</Link>
                 <Link href="/blog" className="text-muted-foreground hover:text-primary">Blog</Link>
               </nav>

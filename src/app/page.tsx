@@ -129,23 +129,37 @@ function Hero() {
             y={-1}
             className="absolute inset-0 h-full w-full stroke-gray-500/30 [mask-image:radial-gradient(at_top_left,white,transparent_75%)]"
         />
-      <div className="container mx-auto px-4 text-center z-10 relative">
-        <h1 className="font-headline text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter">
-          We Craft Digital <br className="hidden md:block" /> Masterpieces
-        </h1>
-        <p className="mt-6 max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground">
-          CodeLits is a digital product studio that partners with ambitious startups and established brands to create exceptional web and mobile experiences.
-        </p>
-        <div className="mt-8 flex justify-center gap-4">
-          <Button asChild size="lg">
-            <Link href="/portfolio">View Our Work</Link>
-          </Button>
-          <Button asChild size="lg" variant="outline">
-            <Link href="/contact">Get in Touch</Link>
-          </Button>
+      <div className="container mx-auto px-4 z-10 relative">
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="text-center md:text-left">
+                <h1 className="font-headline text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter">
+                We Craft Digital <br className="hidden md:block" /> Masterpieces
+                </h1>
+                <p className="mt-6 max-w-3xl text-lg md:text-xl text-muted-foreground">
+                CodeLits is a digital product studio that partners with ambitious startups and established brands to create exceptional web and mobile experiences.
+                </p>
+                <div className="mt-8 flex justify-center md:justify-start gap-4">
+                <Button asChild size="lg">
+                    <Link href="/portfolio">View Our Work</Link>
+                </Button>
+                <Button asChild size="lg" variant="outline">
+                    <Link href="/contact">Get in Touch</Link>
+                </Button>
+                </div>
+            </div>
+            <div className="relative">
+                <Image
+                    src="https://placehold.co/800x600.png"
+                    alt="Digital masterpiece"
+                    width={800}
+                    height={600}
+                    className="rounded-xl shadow-2xl transform hover:scale-105 transition-transform duration-500"
+                    data-ai-hint="digital agency office"
+                />
+            </div>
         </div>
         
-        <div className="mt-20 max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="mt-24 max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4">
             {bentoItems.map((item) => (
                 <Card key={item.title} className={`${item.className} p-6 bg-card/50 backdrop-blur-sm text-left border-primary/20 hover:border-primary/50 transition-colors`}>
                     <item.icon className="w-8 h-8 text-primary mb-4" />

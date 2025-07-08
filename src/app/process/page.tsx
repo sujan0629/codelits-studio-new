@@ -1,33 +1,43 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Search, PenTool, Code, Rocket, Handshake } from "lucide-react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 const processSteps = [
     {
         icon: Search,
         title: "1. Discovery & Strategy",
-        description: "We start by understanding your business, goals, and target audience. This phase involves market research, competitive analysis, and creating a strategic roadmap for the project."
+        description: "We start by understanding your business, goals, and target audience. This phase involves market research, competitive analysis, and creating a strategic roadmap for the project.",
+        image: "https://placehold.co/500x350.png",
+        hint: "discovery strategy meeting"
     },
     {
         icon: PenTool,
         title: "2. Design & Prototyping",
-        description: "Our creative team translates the strategy into wireframes, mockups, and interactive prototypes. We focus on creating a user-centric design that is both beautiful and functional."
+        description: "Our creative team translates the strategy into wireframes, mockups, and interactive prototypes. We focus on creating a user-centric design that is both beautiful and functional.",
+        image: "https://placehold.co/500x350.png",
+        hint: "ui design prototype"
     },
     {
         icon: Code,
         title: "3. Development & Implementation",
-        description: "Our developers bring the designs to life with clean, efficient, and scalable code. We follow agile methodologies to ensure flexibility and transparency throughout the development process."
+        description: "Our developers bring the designs to life with clean, efficient, and scalable code. We follow agile methodologies to ensure flexibility and transparency throughout the development process.",
+        image: "https://placehold.co/500x350.png",
+        hint: "coding development screen"
     },
     {
         icon: Rocket,
         title: "4. Testing & Launch",
-        description: "We conduct rigorous testing to ensure your product is bug-free, secure, and performs flawlessly across all devices. After your approval, we handle the deployment and launch."
+        description: "We conduct rigorous testing to ensure your product is bug-free, secure, and performs flawlessly across all devices. After your approval, we handle the deployment and launch.",
+        image: "https://placehold.co/500x350.png",
+        hint: "testing launch rocket"
     },
     {
         icon: Handshake,
         title: "5. Support & Growth",
-        description: "Our partnership doesn't end at launch. We provide ongoing support, maintenance, and can help with further growth strategies to ensure your long-term success."
+        description: "Our partnership doesn't end at launch. We provide ongoing support, maintenance, and can help with further growth strategies to ensure your long-term success.",
+        image: "https://placehold.co/500x350.png",
+        hint: "support growth team"
     }
 ]
 
@@ -41,25 +51,33 @@ export default function ProcessPage() {
                 </p>
             </div>
 
-            <div className="mt-16 max-w-3xl mx-auto">
-                <div className="space-y-12">
-                    {processSteps.map((step, index) => (
-                        <div key={index} className="flex items-start gap-6">
-                            <div className="flex-shrink-0">
-                                <div className="flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 text-primary">
-                                    <step.icon className="h-6 w-6" />
-                                </div>
-                            </div>
-                            <div>
-                                <h3 className="font-headline text-xl font-semibold">{step.title}</h3>
-                                <p className="mt-2 text-muted-foreground">{step.description}</p>
-                            </div>
+            <div className="mt-20 space-y-24">
+              {processSteps.map((step, index) => (
+                <div key={index} className="grid md:grid-cols-2 gap-12 items-center">
+                  <div className={index % 2 === 0 ? 'md:order-1' : 'md:order-2'}>
+                    <div className="flex items-center gap-4">
+                        <div className="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 text-primary">
+                            <step.icon className="h-6 w-6" />
                         </div>
-                    ))}
+                        <h3 className="font-headline text-2xl font-semibold">{step.title}</h3>
+                    </div>
+                    <p className="mt-4 md:ml-16 text-muted-foreground">{step.description}</p>
+                  </div>
+                  <div className={`relative ${index % 2 === 0 ? 'md:order-2' : 'md:order-1'}`}>
+                      <Image 
+                          src={step.image}
+                          alt={step.title}
+                          width={500}
+                          height={350}
+                          className="rounded-lg shadow-lg aspect-[5/3.5] object-cover"
+                          data-ai-hint={step.hint}
+                      />
+                  </div>
                 </div>
+              ))}
             </div>
 
-            <div className="mt-16 text-center bg-primary/10 p-8 rounded-lg">
+            <div className="mt-24 text-center bg-primary/10 p-8 md:p-12 rounded-lg">
                 <h2 className="font-headline text-2xl md:text-3xl font-bold">Ready to start your project?</h2>
                 <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
                     Let's collaborate to build something amazing.
