@@ -1,3 +1,5 @@
+import { TeamMemberCard } from '@/components/team/TeamMemberCard';
+
 
 
 export default function TeamPage() {
