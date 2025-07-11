@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Line with ball attached to tip</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #0F1011;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    svg {
+      width: 600px;
+      height: 300px;
+      overflow: visible;
+      filter: drop-shadow(0 6px 6px rgba(0,0,0,0.6));
+    }
+    .grey-line, .gold-line {
+      stroke-width: 3;
+      fill: none;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      stroke-dasharray: 720;
+      stroke-dashoffset: 720;
+      stroke: #888888;
+      transform: translateY(45px);
+    }
+    .gold-line {
+      stroke: #FFD700;
+      transform: none;
+    }
+    .moving-ball {
+      r: 7;
+      filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.7));
+    }
+    .grey-ball {
+      fill: #888888;
+    }
+    .gold-ball {
+      fill: #FFD700;
+    }
+  </style>
+</head>
+<body>
+  <svg viewBox="0 0 600 300">
+    <path id="greyPath" class="grey-line" d="
+      M50 160
+      C90 175, 130 155, 180 145
+      S240 160, 290 140
+      C320 155, 360 135, 410 145
+      S470 140, 510 120
+      S550 90, 550 50
+    " />
+    <path id="goldPath" class="gold-line" d="
+      M50 160
+      C70 140, 90 170, 110 140
+      S130 170, 150 140
+      C180 130, 230 130, 310 120
+      S390 100, 450 60
+      S510 40, 550 30
+    " />
+
+    <!-- Balls -->
+    <circle id="greyBall" class="moving-ball grey-ball" r="7" />
+    <circle id="goldBall" class="moving-ball gold-ball" r="7" />
+  </svg>
+
+  <script>
+    const greyPath = document.getElementById('greyPath');
+    const goldPath = document.getElementById('goldPath');
+    const greyBall = document.getElementById('greyBall');
+    const goldBall = document.getElementById('goldBall');
+
+    // Total length of each path
+    const greyLength = greyPath.getTotalLength();
+    const goldLength = goldPath.getTotalLength();
+
+    // Animation duration in milliseconds
+    const duration = 5000;
+    let start = null;
+
+    function animate(timestamp) {
+      if (!start) start = timestamp;
+      const elapsed = timestamp - start;
+      const progress = Math.min(elapsed / duration, 1);
+
+      // Calculate current stroke dash offset (drawing the line)
+      const greyOffset = greyLength * (1 - progress);
+      const goldOffset = goldLength * (1 - progress);
+
+      // Update stroke dashoffset to animate drawing line
+      greyPath.style.strokeDashoffset = greyOffset;
+      goldPath.style.strokeDashoffset = goldOffset;
+
+      // Calculate ball positions exactly at the end of the visible path
+      const greyPoint = greyPath.getPointAtLength(greyLength - greyOffset);
+      const goldPoint = goldPath.getPointAtLength(goldLength - goldOffset);
+
+      // Position the balls (grey ball shifted down by 45 as line is translated)
+      greyBall.setAttribute('cx', greyPoint.x);
+      greyBall.setAttribute('cy', greyPoint.y + 45);
+      goldBall.setAttribute('cx', goldPoint.x);
+      goldBall.setAttribute('cy', goldPoint.y);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    }
+
+    // Initialize stroke dasharray and dashoffset
+    greyPath.style.strokeDasharray = greyLength;
+    greyPath.style.strokeDashoffset = greyLength;
+    goldPath.style.strokeDasharray = goldLength;
+    goldPath.style.strokeDashoffset = goldLength;
+
+    // Start animation
+    requestAnimationFrame(animate);
+  </script>
+</body>
+</html>

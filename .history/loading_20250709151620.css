@@ -1,0 +1,31 @@
+@keyframes orbit1 {
+  0% { transform: rotate(0deg) translateX(24px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(24px) rotate(-360deg); }
+}
+@keyframes orbit2 {
+  0% { transform: rotate(0deg) translateX(18px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(18px) rotate(-360deg); }
+}
+@keyframes orbit3 {
+  0% { transform: rotate(0deg) translateX(12px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(12px) rotate(-360deg); }
+}
+
+.animate-orbit1 {
+  animation: orbit1 1.8s linear infinite;
+  top: 50%;
+  left: 50%;
+  transform-origin: center;
+}
+.animate-orbit2 {
+  animation: orbit2 1.6s linear infinite;
+  top: 50%;
+  left: 50%;
+  transform-origin: center;
+}
+.animate-orbit3 {
+  animation: orbit3 1.4s linear infinite;
+  top: 50%;
+  left: 50%;
+  transform-origin: center;
+}
