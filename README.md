@@ -6,9 +6,9 @@ This repository hosts the codebase for our marketing website, built using **Next
 
 ---
 
-## 🚀 Live Site
+## 🚀Beta(demo) Live Site
 
-> [https://codelitsstudio.com](https://codelitsstudio.com) &nbsp; *(Coming Soon)*
+> [https://beta.codelitsstudio.com](https://beta.codelitsstudio.com) &nbsp; *(Coming Soon)*
 
 ---
 
